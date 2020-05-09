@@ -5,28 +5,26 @@
 #define CJT_ESPECIES_HH
 
 
-//#include "especie.hh"
-#ifndef NO_DIAGRAM  //
-#include <map>      // Para no añadirlo al diagrama de la documentacion
-#include <string>   //
-#include <iostream> //
-#endif              // 
-using namespace std;
+
+#include "especie.hh"
+#ifndef NO_DIAGRAM
+#include <set>
+#include <vector>
+#endif 
+
+typedef vector < vector < double > > Matrix;
 
 /** @class Cjt_especies
-  @brief Representa un conjunto de estudiantes con identificador y gen.
+  @brief Representa un conjunto de especies con identificador y gen.
 */
 class Cjt_especies {
 
 private:
 
-    map<string,string> Conjunto;
+    set<Especie> Conjunto;
 
 
-    map<string,int> kmer(string gen,int k);
-
-    void max_min(map<string,int> kmer1, map<string,int> kmer2,int& max,int& min);
-
+    set<Especie>::iterator busca_identificador(string identificador);
 public:
 
 /** @brief Creadora por defecto del conjunto de especies.
@@ -63,21 +61,19 @@ public:
 
         //Consultoras
 
-
-/** @brief Consulta el gen de una especie del conjunto.
+/** @brief Consulta una especie del conjunto.
 
   \pre Existe una especie en el parámetro implícito con dicho identificador
-  \post El resultado es el gen de dicha especie
+  \post El resultado es dicha especie
 */
-    string obtener_gen(string identificador);
+    Especie obtener_especie(string identificador);
 
+/** @brief Consulta una especie del conjunto.
 
-/** @brief Consulta la distancia entre dos especies del conjunto.
-
-  \pre Hay dos especies con los identificadores dados en el parámetro implícito
-  \post El resultado es la distancia entre las dos especies
+  \pre Existe una especie en el parámetro implícito que se ubica en dicha posicion del conjunto
+  \post El resultado es dicha especie
 */
-    double distancia(string id1,string id2, int k);
+    Especie especie_posicion(int i);
 
 /** @brief Consulta si existe la especie en el conjunto
 
@@ -89,7 +85,7 @@ public:
 /** @brief  Operación de lectura.
 
   \pre <em>Cierto</em>
-  \post El parámetro implícito contiene el conjunto de estudiantes leídos del canal estandard de entrada
+  \post El parámetro implícito contiene el conjunto de especies leídos del canal estandard de entrada
 */
     void lee_cjt_especies();
 
@@ -103,8 +99,10 @@ public:
 /** @brief Consulta la tabla de distancias del conjunto de especies.
  * 
  * \pre <em>Cierto</em>
- * \post Imprime la tabla de distancias entre cada par de especies del conjunto de especies
+ * \post Devuelve una matriz de distancias entre cada par de especies del conjunto de especies
  */
-    void  tabla_distancias();
+    Matrix tabla_distancias(int k);
+
+    void imprime_tabla_distancias(int k);
 };
 #endif

@@ -1,68 +1,44 @@
-#include "cjt_especies.hh"
+#include "especie.hh"
+
 using namespace std;
 
 
-Cjt_especies::Cjt_especies()
+//Especie::Especie(){}
+
+Especie::Especie(string identificador, string gen)
 {
+    id = identificador;
+    this -> gen = gen;
 }
 
-Cjt_especies::~Cjt_especies(){}
+Especie::~Especie(){}
 
-void Cjt_especies::anadir_especie(string identificador, string gen)
+string Especie::consultar_gen()
 {
-    Conjunto[identificador] = gen;
+    return gen;
 }
 
-void Cjt_especies::elimina_especie(string identificador)
+string Especie::consultar_id()
 {
-    Conjunto.erase(identificador);
+    return id;
 }
 
-string Cjt_especies::obtener_gen(string identificador)
+double Especie::distancia(Especie especie2, int k)
 {
-    return Conjunto[identificador];
-}
-
-bool Cjt_especies::existe_especie(string identificador)
-{
-    return Conjunto.find(identificador) != Conjunto.end();
-}
-
-void Cjt_especies::lee_cjt_especies()
-{
-
-    int n;
-    cin >> n;
-    map<string,string> Conjunto;    
-    for (int i = 0; i < n; ++i)
-    {
-        string id,gen;
-        cin >> id >> gen;
-        Conjunto[id] = gen;
-    }
-    this->Conjunto = Conjunto;
-}
-
-void Cjt_especies::imprime_cjt_especies()
-{
-    for (map<string,string>::iterator it = Conjunto.begin(); it != Conjunto.end(); ++it)
-    {
-        cout << it->first << ' ' << it->second << endl;
-    }
-}
-
-double Cjt_especies::distancia(string gen1,string gen2, int k)
-{
-    map<string,int> kmer1 = kmer(gen1,k);
-    map<string,int> kmer2 = kmer(gen2,k);
+    map<string,int> kmer1 = kmer(gen,k);
+    map<string,int> kmer2 = kmer(especie2.gen,k);
     int max,min;
     max_min(kmer1,kmer2,max,min);
     cout << "max: " << max << "     " << "min: " << min << endl;
     return (1 - (double(min) / max)) * 100;
 }
 
+void Especie::imprime_especie()
+{
+    cout << "IDENTIFICADOR: " << id << " GEN: " << gen << endl;
+}
 
-map<string,int> Cjt_especies::kmer(string gen,int k)
+map<string,int> Especie::kmer(string gen,int k)
 {
     int mida_gen = gen.length();
     map<string,int> kmer1;
@@ -74,7 +50,7 @@ map<string,int> Cjt_especies::kmer(string gen,int k)
     return kmer1;
 }
 
-void Cjt_especies::max_min(map<string,int> kmer1, map<string,int> kmer2,int& max,int& min)
+void Especie::max_min(map<string,int>& kmer1, map<string,int>& kmer2,int& max,int& min)
 {
     max = min = 0;
     map<string,int>::iterator it1 = kmer1.begin();
