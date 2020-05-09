@@ -52,8 +52,6 @@ void Cjt_especies::lee_cjt_especies()
         string id,gen;
         cin >> id >> gen;
         Especie aux(gen);
-        aux.escribir_kmer();
-        cout << "----------" << endl;
         Conjunto[id] = gen;
     }
     this->Conjunto = Conjunto;

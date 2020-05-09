@@ -24,13 +24,11 @@ private:
     map<string,int> kmer;                       //kmer
     
 
-    
     map<string,int> obtener_kmer();
     void max_min(map<string,int>& kmer1, map<string,int>& kmer2,double& max,double& min);
 
 public:
 
-  void escribir_kmer();
     //Constructores
 
 /** @brief Creadora por defecto.

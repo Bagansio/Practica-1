@@ -43,13 +43,6 @@ map<string,int> Especie::obtener_kmer()
     return kmer1;
 }
 
-void Especie::escribir_kmer()
-{
-    for (map<string,int>::iterator it = kmer.begin(); it != kmer.end(); ++it)
-    {
-        cout << it->first << ' ' << it->second << endl;
-    }
-}
 
 void Especie::modifica_divisiones(int k)
 {
@@ -86,7 +79,7 @@ void Especie::max_min(map<string,int>& kmer1, map<string,int>& kmer2,double& max
         }
         else
         {
-            max += it2->second;
+            max += it1->second;
             ++it1;
         } 
     }
@@ -102,5 +95,4 @@ void Especie::max_min(map<string,int>& kmer1, map<string,int>& kmer2,double& max
         max += it1->second;
         ++it1;
     }
-    cout << endl << max << endl << min << endl;
 }

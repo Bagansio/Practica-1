@@ -89,9 +89,9 @@ int main()
           }
           else { 
               cout << "ERROR: " << "La especie ";
-              if (not existe_id1 and not existe_id2) cout  << id1 << " y la especie " << id2 << "no existen.";
-              else if (not existe_id1) cout << id1 << "no existe.";
-              else cout << id2 << "no existe.";
+              if (not existe_id1 and not existe_id2) cout  << id1 << " y la especie " << id2 << " no existen.";
+              else if (not existe_id1) cout << id1 << " no existe.";
+              else cout << id2 << " no existe.";
           }
           cout << endl;
         }
