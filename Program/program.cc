@@ -36,114 +36,35 @@
  * 
  */ 
 
+
 #include "cjt_especies.hh"
 #include "Cluster.hh"
 
+string INICIO = "Inserte su instruccion: ";
 string CORRECTO = "La funcion se ha realizado correctamente.";
 
 //Peticiones
 string PETICIONID = "Escriba el identificador de la especie:";
 string PETICIONGEN = "Escriba el gen de la especie";
-
+//Excepciones
 string EXCEPCION1 = "Ya existe esa especie en el conjunto.";
 string EXCEPCION2 = "No existe esa especie en el conjunto.";
+string EXCEPCION3 = "No se puede realizar el algoritmo WPGMA.";
 
-/** @brief Añade una especie al conjunto.
-
-  Si ya existe una especie con el mismo identificador manda un mensaje de error.
-*/
-void crea_especie(Cjt_especies& Conjunto);
-
-
-/** @brief Consulta gen de una especie del conjunto.
-
-  Sino existe manda un mensaje de error.
-*/
-void obtener_gen(const Cjt_especies& Conjunto);
-
-
-/** @brief Consulta distancia entre dos especies del conjunto.
-
-  Sino existe alguna de las dos especies manda un mensaje de error.
-*/
-void obtener_distancia(const Cjt_especies& Conjunto);
-
-
-/** @brief Elimina una especie del conjunto.
-
-Sino existe tal especie manda un mensaje de error.
-*/
-void elimina_especie(Cjt_especies& Conjunto);
-
-
-/** @brief Consulta si exista una especie en el conjunto.
-
-  Sino existe tal especie manda un mensaje de error.
-*/
-void existe_especie(const Cjt_especies& Conjunto);
-
-
-/** @brief Lectura de un conjunto de especies.
-
-  \pre <em>Cierto</em>
-  \post El Conjunto es totalmente modificado
-*/
-void lee_cjt_especies(Cjt_especies& Conjunto);
-
-
-/** @brief Operación de escritura.
-
-  \pre <em>Cierto</em>
-  \post Se escribe el conjunto de especies por el canal estandar de salida
-*/
-void imprime_cjt_especies(const Cjt_especies& Conjunto);
-
-
-/** @brief Operación de escritura de la tabla de distancias.
-
-  \pre <em>Cierto</em>
-  \post Se escribe la tabla de distancias de las especies del conjunto.
-*/
-void tabla_distancias(const Cjt_especies& Conjunto);
-
-
-/** @brief Inicializa clústers con el conjunto.
-
-  Imprime los clústers resultantes, así como la tabla de distancias entre clústers.
-*/
-void inicializa_clusters(const Cjt_especies& Conjunto, Cluster& cluster);
-
-
-/** @brief Ejecuta un paso WPGMA.
-
-  \pre Número de clústers del conjunto > 1
-  \post Si el pre es cierto se ejecuta sino manda un mensaje de error
-*/
-void ejecuta_paso_wpgma(Cluster& cluster);
-
-
-/** @brief Operación de escritura de un clúster.
-
-  Sino existe manda un mensaje de error.
-*/
-void imprime_cluster(const Cluster& cluster);
-
-
-/** @brief Imprime el árbol filogenético para el conjunto de especies actual.
-*/
-void imprime_arbol_filogenetico(const Cjt_especies& Conjunto, Cluster& cluster);
-
-
+cout.setf(ios::fixed);
+cout.precision(4);
 
 int main()
 {
+
+
     cout << "Inserte un numero para dividir en partes el gen:" << endl;
     int k;
     string comanda;
     cin >> k;
-    Cjt_especies Conjunto;
-    Cluster cluster;
-    while (cin >> comanda)
+    Cjt_especies Conjunto(k);
+    Cluster clusters;
+    while (cout << INICIO << endl and cin >> comanda)
     {
         if (comanda == "crea_especie") //CREAR UNA ESPECIE AL CONJUNTO
         {
@@ -168,7 +89,7 @@ int main()
           cout << PETICIONID << endl;
           cin >> id;
                                         //FUNCION
-          if (Conjunto.existe_especie(id)) cout << "El gen es: " << Conjunto.obtener_especie(id).consultar_gen();
+          if (Conjunto.existe_especie(id)) cout << "El gen de " << id << " es: " << Conjunto.obtener_gen(id);
           else cout << EXCEPCION2;
         }
         else if (comanda == "distancia")
@@ -183,7 +104,7 @@ int main()
           if (Conjunto.existe_especie(id1) and Conjunto.existe_especie(id2)) 
           {
             cout << "La distancia entre " << id1 << " y " << id2 << " es: ";
-            cout << Conjunto.obtener_especie(id1).distancia(Conjunto.obtener_especie(id2), k);
+            cout << Conjunto.distancia(id1,id2);
           }
           else cout << EXCEPCION2;
         }
@@ -222,17 +143,43 @@ int main()
         {
           Conjunto.imprime_cjt_especies();
         }
-      
-        else if (comanda == "tabla_distancias") //ESCRIBE LA TABLA DE DISTANCIAS
+        else if (comanda == "tabla_distancias") //IMPRIME LA TABLA DE DISTANCIAS
         {
+          Conjunto.imprime_tabla_distancias();
+        }
+        else if (comanda == "inicializa_clusters") //INICIALIZA LOS CLUSTERS Y LOS IMPRIME
+        {
+          clusters = Cluster(Conjunto);
+          clusters.imprime_cluster();
+        }
+        else if (comanda == "ejecuta_paso_wpgma") //EJECUTA 
+        {
+          if (Conjunto.tamaño() - cluster.tamaño() > 1)
+          {
+            cluster.wpgma(Conjunto);
+            cluster.imprime_tabla();
+          }
+          else cout << EXCEPCION3;
 
         }
-        else if (comanda == "inicializa_clusters") inicializa_clusters(Conjunto,cluster);
-        else if (comanda == "ejecuta_paso_wpgma") ejecuta_paso_wpgma(cluster);
-        else if (comanda == "imprime_cluster") imprime_cluster(cluster);
-        else if (comanda == "imprime_arbol_filogenetico") imprime_arbol_filogenetico(Conjunto,cluster);
-        else if (comanda == "fin") break;
+        else if (comanda == "imprime_cluster") //IMPRIME CLUSTER
+        {
+          clusters.imprime_cluster();
+        }
+        else if (comanda == "imprime_arbol_filogenetico") //IMPRIME ARBOL FILOGENETICO
+        {
+          if(Conjunto.tamaño() > 1) 
+          {
+            cluster = Cluster(Conjunto);
+            while (Conjunto.tamaño() - cluster.tamaño() > 1)
+            {
+              cluster.wpgma(Conjunto);
+            }
+            cluster.imprime_arbol_filogenetico();
+          }
+          else cout << "El conjunto de clústers es vacío."
+        }
+        else if (comanda == "fin") break;     //ACABA EL PROGRAMA
         cout << endl;
     }
 }
-

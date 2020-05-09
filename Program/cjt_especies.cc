@@ -2,40 +2,53 @@
 using namespace std;
 
 
-Cjt_especies::Cjt_especies()
+Cjt_especies::Cjt_especies(int k)
 {
+    divisiones = k;
 }
 
 Cjt_especies::~Cjt_especies(){}
 
 void Cjt_especies::anadir_especie(string identificador, string gen)
 {
-    Especie aux(identificador,gen);
-    Conjunto.insert(aux);
+    Conjunto[identificador] = gen;
 }
 
 void Cjt_especies::elimina_especie(string identificador)
 {
-    Conjunto.erase(busca_identificador(identificador));
+    Conjunto.erase(identificador);
 }
 
-Especie Cjt_especies::obtener_especie(string identificador)
+string Cjt_especies::obtener_gen(string identificador)
 {
-    return *busca_identificador(identificador);
+    return Conjunto[identificador];
 }
 
-
-Especie Cjt_especies::especie_posicion(int i)
+string Cjt_especies::obtener_id(int i)
 {
-    set<Especie>::iterator it = Conjunto.begin();
+    map<string,string>::iterator it = Conjunto.begin();
     for (int j = 0; j < i; ++j) ++it;
-    return *it;
-}
-
+    return (*it).first; 
+}   
 
 bool Cjt_especies::existe_especie(string identificador)
 {
-    return busca_identificador(identificador) != Conjunto.end();
+    return Conjunto.find(identificador) != Conjunto.end();
+}
+
+int Cjt_especies::tamaño()
+{
+    return Conjunto.size();
+}
+
+double Cjt_especies::distancia(string gen1,string gen2)
+{
+    map<string,int> kmer1 = kmer(gen1);
+    map<string,int> kmer2 = kmer(gen2);
+    int max,min;
+    max_min(kmer1,kmer2,max,min);
+    cout << "max: " << max << "     " << "min: " << min << endl;
+    return (1 - (double(min) / max)) * 100;
 }
 
 void Cjt_especies::lee_cjt_especies()
@@ -43,75 +56,97 @@ void Cjt_especies::lee_cjt_especies()
 
     int n;
     cin >> n;
-    set<Especie> Conjunto;    
+    map<string,string> Conjunto;    
     for (int i = 0; i < n; ++i)
     {
         string id,gen;
         cin >> id >> gen;
-        Especie aux(id,gen);
-        Conjunto.insert(aux);
+        Conjunto[id] = gen;
     }
     this->Conjunto = Conjunto;
 }
 
 void Cjt_especies::imprime_cjt_especies()
 {
-    for (set<Especie>::iterator it = Conjunto.begin(); it != Conjunto.end(); ++it)
+    for (map<string,string>::iterator it = Conjunto.begin(); it != Conjunto.end(); ++it)
     {
-        Especie aux = *it;
-        aux.imprime_especie();
+        cout << it->first << ' ' << it->second << endl;
     }
 }
 
-Matrix Cjt_especies::tabla_distancias(int k)
+Matrix Cjt_especies::tabla_distancias()
 {
     int n = Conjunto.size();
     Matrix tabla(n,vector<double> (n));
-    set<Especie>::iterator it_fila = Conjunto.begin();
+    map<string,string>::iterator it_fila = Conjunto.begin();
     for (int i = 0; i < n; ++i)             // Filas
     {
-        set<Especie>::iterator it_columna = Conjunto.begin();
+        map<string,string>::iterator it_columna = Conjunto.begin();
         for (int j = 0; j < n; ++j)         // Columnas
         {
-            Especie aux = *it_fila;
-            tabla[i][j] = aux.distancia(*it_columna,k);
+            tabla[i][j] = distancia((*it_columna).second,(*it_fila).second);
             ++it_columna;
         }
         ++it_fila;
     }
-    return tabla;
+    return tabla;  
 }
 
-void Cjt_especies::imprime_tabla_distancias(int k)
+map<string,int> Cjt_especies::kmer(string gen)
 {
-    Matrix tabla = tabla_distancias(k);
-    int n = tabla.size();
-    for (set<Especie>::iterator it = Conjunto.begin(); it != Conjunto.end(); ++it) 
+    int mida_gen = gen.length();
+    map<string,int> kmer1;
+    for (int i = 0; i <= mida_gen - divisiones; ++i) 
     {
-        Especie aux = *it;
-        cout << ' ' << aux.consultar_id() << ' ';
+        string aux = gen.substr(i,divisiones);       //crea un string aux hasta k posiciones desde i
+        ++kmer1[aux];                       //poner el string aux en el map y si ya existe sumarle 1
     }
-    cout << endl;
-    set<Especie>::iterator it = Conjunto.begin();
-    for (int i = 0; i < n; ++i)
+    return kmer1;
+}
+
+void Cjt_especies::max_min(map<string,int> kmer1, map<string,int> kmer2,int& max,int& min)
+{
+    max = min = 0;
+    map<string,int>::iterator it1 = kmer1.begin();
+    map<string,int>::iterator it2 = kmer2.begin();
+    while (it1 != kmer1.end() and it2 != kmer2.end())
     {
-        Especie aux = *it;
-        cout << aux.consultar_id();
-        for (int j = 0; j < n; ++j)
+        if (it1->first == it2->first)
         {
-            cout << ' ' << tabla[i][j];
+            if (it1->second > it2->second)
+            {
+                max += it1->second;
+                min += it2->second;
+            } 
+            else
+            { 
+                max += it2->second;
+                min += it1->second;
+            }
+            ++it1;
+            ++it2;
         }
-        ++it;
-        cout << endl;
+        else if (it1->first > it2->first)
+        {
+            max += it2->second;
+            ++it2;
+        }
+        else
+        {
+            max += it2->second;
+            ++it1;
+        } 
     }
-}
-
-set<Especie>::iterator Cjt_especies::busca_identificador(string identificador)
-{
-    for(set<Especie>::iterator it = Conjunto.begin(); it != Conjunto.end(); ++it)
+    map<string,int>::iterator end; 
+    if (it1 == kmer1.end())
+    { 
+        end = kmer2.end();
+        it1 = it2;
+    }
+    else end = kmer1.end();
+    while (it1 != end)
     {
-        Especie aux = *it;
-        if (aux.consultar_id() == identificador) return it;
+        max += it1->second;
+        ++it1;
     }
-    return Conjunto.end();
 }

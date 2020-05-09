@@ -1,8 +1,21 @@
 #include "Cluster.hh"
 
-Cluster::Cluster(const Cjt_especies& Conjunto, int k)
+Cluster::~Cluster()
 {
-    Matrix tabla = Conjunto.tabla_distancias(k);
+    destrucion_recursiva(arbol);
+}
+
+
+void Cluster::destrucion_recursiva(BinTree<string>& aux)
+{
+        destrucion_recursiva(aux.left());
+        destrucion_recursiva(aux.right());
+        delete aux;
+}
+
+Cluster::Cluster(Cjt_especies& Conjunto)
+{
+    Matrix tabla = Conjunto.tabla_distancias();
     int min_f, min_c;
     min_f = min_c = 0;
     int n = tabla.size();
@@ -20,12 +33,45 @@ Cluster::Cluster(const Cjt_especies& Conjunto, int k)
             }
         }
     }
-    Especie derecha = Conjunto.obtener_especie_posicion(min_f);
-    Especie izquierda = Conjunto.obtener_especie_posicion(min_c);
-    if (derecha.consultar_id() < izquierda.consultar_id())
+    string derecha = Conjunto.obtener_id(min_f);
+    string izquierda = Conjunto.obtener_id(min_c);
+    if (derecha < izquierda)
     {
-        Especie aux = derecha;
+        string aux = derecha;
         derecha = izquierda;
         izquierda = aux;
+    }
+    BinTree<string> left(izquierda);
+    BinTree<string> right(derecha);
+    arbol = BinTree<string> (izquierda+derecha,left,right);
+}
+
+Cluster::Cluster(string id, Cluster& izq, Cluster& derecha)
+{
+    arbol = BinTree<string>(id,izq.arbol.left(),derecha.arbol.right());
+}
+
+Cluster Cluster::izquierda()
+{
+    Cluster aux;
+    aux.arbol = arbol.left();
+    return aux;
+}
+
+Cluster Cluster::derecha()
+{
+    Cluster aux;
+    aux.arbol = arbol.right();
+    return aux;
+}
+
+void Cluster::imprime_cluster()
+{
+    if (not arbol.empty())
+    {
+        
+        izquierda().imprime_cluster();
+        cout << arbol.value() << endl;
+        derecha().imprime_cluster();
     }
 }

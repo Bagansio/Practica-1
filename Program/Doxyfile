@@ -95,12 +95,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 INPUT                  = "."
 INPUT_ENCODING         = utf-8
-FILE_PATTERNS          = *.hpp \ *.hh \
-                         main*.cpp \ main*.cc \
-                         pro2*.cpp \ pro2*.cc \
-			 program.cpp \ program.cc \
-                         principal*.cpp \ principal*.cc \
-                         pro2_s8.cc 
+FILE_PATTERNS          = Cluster.hh cjt_especies.hh program.cc
 
 RECURSIVE              = NO
 EXCLUDE                = *~ \ readbool.hh
