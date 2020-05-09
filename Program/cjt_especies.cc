@@ -67,10 +67,11 @@ void Cjt_especies::imprime_cjt_especies()
 
 void Cjt_especies::tabla_distancias()
 {
-    int n = 0;
-    for (int i = 1; i < Conjunto.size(); ++i) n += i;
-    vector<tabla> v(n);
-    n = 0;
+    int mida = Conjunto.size();
+    if (mida % 2 == 0) mida = mida / 2 * (mida - 1);
+    else mida *= mida/2;
+    vector<tabla> v(mida);
+    mida = 0;
     for (map<string,Especie>::iterator it1 = Conjunto.begin(); it1 != Conjunto.end(); ++it1)
     {
         map<string,Especie>::iterator it2 = it1;
@@ -81,8 +82,8 @@ void Cjt_especies::tabla_distancias()
             aux.id1 = it1->first;
             aux.id2 = it2->first;
             aux.distancia = it1->second.distancia(it2->second);
-            v[n] = aux;
-            ++n;
+            v[mida] = aux;
+            ++mida;
             ++it2;
         }
     }
