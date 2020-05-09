@@ -2,13 +2,18 @@
 
 using namespace std;
 
+int Especie::divisiones = 0;
 
-//Especie::Especie(){}
-
-Especie::Especie(string identificador, string gen)
+Especie::Especie()
 {
-    id = identificador;
+    gen = "a";
+}
+
+
+Especie::Especie(string gen)
+{
     this -> gen = gen;
+    kmer = obtener_kmer();
 }
 
 Especie::~Especie(){}
@@ -18,39 +23,41 @@ string Especie::consultar_gen()
     return gen;
 }
 
-string Especie::consultar_id()
+
+double Especie::distancia(Especie especie2)
 {
-    return id;
+    double max,min;
+    max_min(kmer,especie2.kmer,max,min);
+    return (1 - (min / max)) * 100;
 }
 
-double Especie::distancia(Especie especie2, int k)
-{
-    map<string,int> kmer1 = kmer(gen,k);
-    map<string,int> kmer2 = kmer(especie2.gen,k);
-    int max,min;
-    max_min(kmer1,kmer2,max,min);
-    cout << "max: " << max << "     " << "min: " << min << endl;
-    return (1 - (double(min) / max)) * 100;
-}
-
-void Especie::imprime_especie()
-{
-    cout << "IDENTIFICADOR: " << id << " GEN: " << gen << endl;
-}
-
-map<string,int> Especie::kmer(string gen,int k)
+map<string,int> Especie::obtener_kmer()
 {
     int mida_gen = gen.length();
     map<string,int> kmer1;
-    for (int i = 0; i <= mida_gen - k; ++i) 
+    for (int i = 0; i <= mida_gen - divisiones; ++i) 
     {
-        string aux = gen.substr(i,k);       //crea un string aux hasta k posiciones desde i
+        string aux = gen.substr(i,divisiones);       //crea un string aux hasta k posiciones desde i
         ++kmer1[aux];                       //poner el string aux en el map y si ya existe sumarle 1
     }
     return kmer1;
 }
 
-void Especie::max_min(map<string,int>& kmer1, map<string,int>& kmer2,int& max,int& min)
+void Especie::escribir_kmer()
+{
+    for (map<string,int>::iterator it = kmer.begin(); it != kmer.end(); ++it)
+    {
+        cout << it->first << ' ' << it->second << endl;
+    }
+}
+
+void Especie::modifica_divisiones(int k)
+{
+    divisiones = k;
+}
+
+
+void Especie::max_min(map<string,int>& kmer1, map<string,int>& kmer2,double& max,double& min)
 {
     max = min = 0;
     map<string,int>::iterator it1 = kmer1.begin();
@@ -95,4 +102,5 @@ void Especie::max_min(map<string,int>& kmer1, map<string,int>& kmer2,int& max,in
         max += it1->second;
         ++it1;
     }
+    cout << endl << max << endl << min << endl;
 }

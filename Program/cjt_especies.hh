@@ -5,16 +5,20 @@
 #define CJT_ESPECIES_HH
 
 
-//#include "especie.hh"
+#include "especie.hh"
 #ifndef NO_DIAGRAM  
 #include <vector>   
-#include <map>      // Para no añadirlo al diagrama de la documentacion
 #include <string>   
 #include <iostream> 
 #endif              
 using namespace std;
 
-typedef vector < vector < double > > Matrix;
+typedef vector < vector < pair <string,double> > > Matrix;
+
+struct tabla{
+    double distancia;
+    string id1, id2;
+};
 
 /** @class Cjt_especies
   @brief Representa un conjunto de especies con identificador y gen.
@@ -23,12 +27,15 @@ class Cjt_especies {
 
 private:
 
-    map<string,string> Conjunto;
-    static int divisiones;
-
-    map<string,int> kmer(string gen);
-
-    void max_min(map<string,int> kmer1, map<string,int> kmer2,int& max,int& min);
+    map<string,Especie> Conjunto;
+    
+/** @brief Consulta la tabla de distancias del conjunto de especies.
+ * 
+ * \pre <em>Cierto</em>
+ * \post Devuelve una matriz de distancias entre cada par de especies del conjunto de especies
+ */
+    void tabla_distancias();
+    vector<tabla> tabla_dist;
 
 public:
 
@@ -66,6 +73,12 @@ public:
 
         //Consultoras
 
+/** @brief Consulta una especie del conjunto.
+
+  \pre Existe una especie en el parámetro implícito con dicho identificador
+  \post El resultado es dicha especie
+*/
+    Especie obtener_especie(string identificador);
 
 /** @brief Consulta el gen de una especie del conjunto.
 
@@ -74,13 +87,6 @@ public:
 */
     string obtener_gen(string identificador);
 
-/** @brief Consulta el id de una especie del conjunto.
-
-  \pre Existe una especie en el parámetro implícito que se ubica en dicha posicion del conjunto
-  \post El resultado es el id de dicha especie
-*/
-    string obtener_id(int i);
-
 /** @brief Consulta la distancia entre dos especies del conjunto.
 
   \pre Hay dos especies con los identificadores dados en el parámetro implícito
@@ -88,19 +94,8 @@ public:
 */
     double distancia(string id1,string id2);
 
-/** @brief Consulta si existe la especie en el conjunto
 
-  \pre <em>Cierto</em>
-  \post Devuelve <b>true</b> si existe dicha especie en el parámetro implícito <br> Devuelve <b>false</b> sino existe dicha especie en el parámetro implícito
-*/
     bool existe_especie(string identificador);
-
-/** @brief Consulta el tamaño del conjunto.
-
-  \pre <em>Cierto</em>
-  \post Devuelve el tamaño del parámetro implícito
-*/
-    int tamaño();
 
 /** @brief  Operación de lectura.
 
@@ -115,13 +110,6 @@ public:
   \post Se han escrito por el canal estandard de salida a las especies del conjunto que contiene el parámetro implícito
 */
     void imprime_cjt_especies();
-
-/** @brief Consulta la tabla de distancias del conjunto de especies.
- * 
- * \pre <em>Cierto</em>
- * \post Devuelve una matriz de distancias entre cada par de especies del conjunto de especies
- */
-    Matrix tabla_distancias();
 
 /** @brief Imprime la tabla de distancias del conjunto de especies.
  * 

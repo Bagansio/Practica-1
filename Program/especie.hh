@@ -19,16 +19,18 @@ using namespace std;
 class Especie {
 
 private:
-    string id; //identificador
-    string gen;
-
+    string gen;                                 //gen
+    static int divisiones;                      //divisiones en la que se dividira el gen para hacer el kmer
+    map<string,int> kmer;                       //kmer
     
 
-    map<string,int> kmer(string gen,int k);
-    void max_min(map<string,int>& kmer1, map<string,int>& kmer2,int& max,int& min);
+    
+    map<string,int> obtener_kmer();
+    void max_min(map<string,int>& kmer1, map<string,int>& kmer2,double& max,double& min);
 
 public:
 
+  void escribir_kmer();
     //Constructores
 
 /** @brief Creadora por defecto.
@@ -40,12 +42,13 @@ public:
     Especie();
 
 
-/** @brief Creadora de una especie con id y gen.
+
+/** @brief Creadora de una especie con gen.
   
-  \pre Un string identificador y un string gen
-  \post El resultado es una especie con id = identificador y this -> gen = gen
+  \pre Un string gen
+  \post El resultado es una especie con this -> gen = gen
 */
-    Especie(string identificador, string gen);
+    Especie(string gen);
 
     //Destructora
 
@@ -62,30 +65,26 @@ public:
 */
    string consultar_gen(); 
 
-/** @brief Consultora del identificador de una especie.
-
-  \pre <em>Cierto</em>
-  \post El resultado es el id del parámetro implícito
-*/
-   string consultar_id();
-
 /** @brief Consulta la distancia entre dos especies.
 
   \pre Hay dos especies con los identificadores dados en el parámetro implícito
   \post El resultado es la distancia entre las dos especies
 */
-    double distancia(Especie e1, int k);
+    double distancia(Especie e1);
 
-/** @brief Operación de escritura.
 
-  \pre <em>Cierto</em>
-  \post Se ha escrito por el canal estandar de salida a la especie
+    // MODIFICADORAS
+
+
+/** @brief Modifica el valor de divisiones.
+
+  \pre  k > 0
+  \post Divisiones pasa a ser igual a k
 */
-    void imprime_especie();
-    
-
+    static void modifica_divisiones(int k);
     // OPERATOR
 
+/*
     bool operator < (const Especie& aux) const 
     {
       return id < aux.id;
@@ -94,5 +93,6 @@ public:
     {
       return id > aux.id;
     }
+*/
 };
 #endif
