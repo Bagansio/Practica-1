@@ -41,6 +41,24 @@ bool Cjt_especies::existe_especie(string identificador)
     return Conjunto.find(identificador) != Conjunto.end();
 }
 
+vector<string> Cjt_especies::identificadores()
+{
+    vector<string> v(Conjunto.size());
+    int i = 0;
+    for (map<string,Especie>::iterator it = Conjunto.begin(); it != Conjunto.end(); ++it)
+    {
+        v[i] = it->first;
+        ++i;
+    }
+    return v;
+
+}
+
+vector<tabla> Cjt_especies::obtener_tabla_distancias()
+{
+    return tabla_dist;
+}
+
 void Cjt_especies::lee_cjt_especies()
 {
 

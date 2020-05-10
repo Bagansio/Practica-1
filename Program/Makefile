@@ -10,8 +10,18 @@ especie.o:  especie.cc especie.hh
 cjt_especies.o:  cjt_especies.cc cjt_especies.hh especie.hh 
 	g++ -c cjt_especies.cc $(OPCIONS)
 
+cjt_clusters.o: cjt_clusters.cc cjt_clusters.hh cjt_especies.hh especie.hh
+	g++ -c cjt_clusters.cc $(OPCIONS)
+	
 program.o: program.cc cjt_especies.hh especie.hh 
 	g++ -c program.cc $(OPCIONS)
+
+
+borrar:
+	rm a.txt
+	rm *.o 
+	rm *.exe
+
 
 clean:
 	rm *.o

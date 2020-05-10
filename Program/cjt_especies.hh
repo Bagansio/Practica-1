@@ -94,8 +94,26 @@ public:
 */
     double distancia(string id1,string id2);
 
+/** @brief Consulta en el conjunto una especie.
 
+  \pre <em> Cierto </em>
+  \post Devuelve cierto en el caso que exista esa especie en el conjunto
+*/
     bool existe_especie(string identificador);
+
+/** @brief Consulta los identificadores del conjunto.
+
+  \pre <em> Cierto </em>
+  \post Devuelve en forma de vector los identificadores del conjunto
+*/
+    vector<string> identificadores();
+
+/** @brief Consulta la tabla del conjunto.
+
+  \pre  <em>Cierto</em>
+  \post Devuelve la tabla de distancias del conjunto
+*/
+    vector<tabla> obtener_tabla_distancias();
 
 /** @brief  Operación de lectura.
 
