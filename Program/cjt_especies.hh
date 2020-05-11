@@ -13,12 +13,11 @@
 #endif              
 using namespace std;
 
-typedef vector < vector < pair <string,double> > > Matrix;
-
+/*
 struct tabla{
     double distancia;
     string id1, id2;
-};
+};*/
 
 /** @class Cjt_especies
   @brief Representa un conjunto de especies con identificador y gen.
@@ -35,7 +34,7 @@ private:
  * \post Devuelve una matriz de distancias entre cada par de especies del conjunto de especies
  */
     void tabla_distancias();
-    vector<tabla> tabla_dist;
+    map<string,map<string,double>> tabla_dist;
 
 public:
 
@@ -113,7 +112,7 @@ public:
   \pre  <em>Cierto</em>
   \post Devuelve la tabla de distancias del conjunto
 */
-    vector<tabla> obtener_tabla_distancias();
+    //vector<tabla> obtener_tabla_distancias();
 
 /** @brief  Operación de lectura.
 
