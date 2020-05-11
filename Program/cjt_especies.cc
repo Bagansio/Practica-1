@@ -53,11 +53,12 @@ vector<string> Cjt_especies::identificadores()
     return v;
 
 }
-/*
-vector<tabla> Cjt_especies::obtener_tabla_distancias()
+
+map<string,map<string,double>> Cjt_especies::obtener_tabla_distancias()
 {
+    tabla_distancias();
     return tabla_dist;
-}*/
+}
 
 void Cjt_especies::lee_cjt_especies()
 {

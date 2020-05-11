@@ -112,7 +112,7 @@ public:
   \pre  <em>Cierto</em>
   \post Devuelve la tabla de distancias del conjunto
 */
-    //vector<tabla> obtener_tabla_distancias();
+    map<string,map<string,double>> obtener_tabla_distancias();
 
 /** @brief  Operación de lectura.
 

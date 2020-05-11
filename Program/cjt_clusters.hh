@@ -21,11 +21,11 @@ class Cjt_clusters
 
 private:
 
-  map<string,BinTree<tabla>> bosque;
+  map<string,BinTree<pair<string,double>>> bosque;
 
-  vector<tabla> tabla_dist;
+  map<string,map<string,double>> tabla_dist;
 
-  void actualizar_tabla(Cjt_especies& Conjunto,const tabla& fusionar);
+  void actualizar_tabla(Cjt_especies& Conjunto,const pair<string,string>& fusionar);
 
 public:
 
@@ -38,13 +38,13 @@ public:
   \pre <em>Cierto</em>
   \post El resultado es un cluster vacio
 */
-    Cjt_clusters();
+    Cjt_clusters() {}
 
     //DESTRUCTORA
 
 /** @brief Destructora por defecto.
 */
-    ~Cjt_clusters();
+    ~Cjt_clusters() {}
 
     //CONSULTORAS
 
@@ -53,7 +53,7 @@ public:
   \pre <em> Cierto </em>
   \post Devuelve los identificadores y la distancia de los dos elementos con menor distancia entre ellos
 */
-    tabla distancia_minima();
+    pair<string,string> distancia_minima(double& min);
 
 
         //MODIFICADORAS

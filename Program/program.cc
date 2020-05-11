@@ -38,7 +38,7 @@
 
 
 #include "cjt_especies.hh"
-
+#include "cjt_clusters.hh"
 
 int main()
 {
@@ -46,6 +46,7 @@ int main()
     string comanda;
     cin >> k;
     Cjt_especies Conjunto(k);
+    Cjt_clusters Clusters;
   
     while (cin >> comanda)
     {
@@ -139,6 +140,17 @@ int main()
           Conjunto.imprime_tabla_distancias();
         }
         else if (comanda == "fin") break;     //ACABA EL PROGRAMA
+        else if (comanda == "inicializar_clusters")
+        {
+
+        }
+        else if (comanda == "dist_min")
+        {
+          Clusters.inicializar_clusters(Conjunto);
+          double min = 100;
+          pair<string,string> aux = Clusters.distancia_minima(min);
+          cout << aux.first << aux.second;
+        }
         cout << endl;
     }
 }

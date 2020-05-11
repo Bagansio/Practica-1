@@ -2,36 +2,47 @@
 
 void Cjt_clusters::inicializar_clusters(Cjt_especies& Conjunto)  //transformarlo en un void que actualize bosque
 {
-    map<string,BinTree<tabla>> aux;
+    map<string,BinTree<pair<string,double>>> aux;
     vector<string> v = Conjunto.identificadores();
     int dimensiones = v.size();
     for (int i = 0; i < dimensiones; ++i)
     {
-        aux[v[i]];
+        aux[v[i]] = BinTree<pair<string,double>>(make_pair(v[i],0));
     }
     
     bosque = aux;
+    tabla_dist = Conjunto.obtener_tabla_distancias();
 }
 
 
-tabla Cjt_clusters::distancia_minima()
+pair<string,string> Cjt_clusters::distancia_minima(double& min)
 {
-    int mida = tabla_dist.size();
-    tabla min = tabla_dist[0];
-    for (int i = 1; i < mida; ++i)
+    map<string,map<string,double>>::iterator it1 = tabla_dist.begin();
+    pair<string,string> dist_min;
+    min = 100;       //distancia más lejana
+    while(it1 != tabla_dist.end())
     {
-        if (min.distancia > tabla_dist[i].distancia) min = tabla_dist[i];
+        for(map<string,double>::iterator it2 = it1->second.begin(); it2 != it1->second.end(); ++it2)
+        {
+            if (min > it2->second)
+            {
+                dist_min = make_pair(it1->first,it2->first);
+                min = it2->second;
+            }
+        }
+        ++it1;
     }
-    return min;
+    return dist_min;
 }
-
+/*
 void  Cjt_clusters::wpgma(Cjt_especies& Conjunto)
 {
-    tabla fusionar = distancia_minima();
-    bosque[fusionar.id1 + fusionar.id2] =  BinTree<tabla>(fusionar,bosque[fusionar.id1],bosque[fusionar.id2]);
-    bosque.erase(fusionar.id1);
-    bosque.erase(fusionar.id2);
-    actualizar_tabla(Conjunto);
+    double dist;
+    pair<string,string> fusionar = distancia_minima(dist);
+    bosque[fusionar.first + fusionar.second] =  BinTree<pair<string,double>>(make_pair(fusionar.first + fusionar.second,dist),bosque[fusionar.first],bosque[fusionar.second]);
+    bosque.erase(fusionar.first);
+    bosque.erase(fusionar.second);
+    //actualizar_tabla(Conjunto);
 }
 
 void Cjt_clusters::actualizar_tabla(Cjt_especies& Conjunto,const tabla& fusionar)
@@ -64,3 +75,4 @@ void Cjt_clusters::actualizar_tabla(Cjt_especies& Conjunto,const tabla& fusionar
         }
     }
 }
+*/
