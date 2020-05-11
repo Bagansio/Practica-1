@@ -17,6 +17,9 @@ program.o: program.cc cjt_especies.hh especie.hh
 	g++ -c program.cc $(OPCIONS)
 
 
+test: program.exe
+	./program.exe < inp.txt > a.txt
+	
 borrar:
 	rm a.txt
 	rm *.o 
