@@ -142,7 +142,13 @@ int main()
         else if (comanda == "fin") break;     //ACABA EL PROGRAMA
         else if (comanda == "inicializar_clusters")
         {
-
+          Clusters.inicializar_clusters(Conjunto);
+        }
+        else if(comanda == "wpgma")
+        {
+          
+          Clusters.wpgma();
+          Clusters.imprime_tabla_distancias();
         }
         else if (comanda == "dist_min")
         {

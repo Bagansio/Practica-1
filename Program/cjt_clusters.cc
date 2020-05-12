@@ -34,45 +34,69 @@ pair<string,string> Cjt_clusters::distancia_minima(double& min)
     }
     return dist_min;
 }
-/*
-void  Cjt_clusters::wpgma(Cjt_especies& Conjunto)
+
+void  Cjt_clusters::wpgma()
 {
     double dist;
     pair<string,string> fusionar = distancia_minima(dist);
     bosque[fusionar.first + fusionar.second] =  BinTree<pair<string,double>>(make_pair(fusionar.first + fusionar.second,dist),bosque[fusionar.first],bosque[fusionar.second]);
     bosque.erase(fusionar.first);
     bosque.erase(fusionar.second);
-    //actualizar_tabla(Conjunto);
+    actualizar_tabla(fusionar);
 }
 
-void Cjt_clusters::actualizar_tabla(Cjt_especies& Conjunto,const tabla& fusionar)
+void Cjt_clusters::actualizar_tabla(const pair<string,string>& fusionar)
 {
-    int elementos = tabla_dist.size();
-    elementos -= bosque.size();
-
-    vector<tabla> aux(elementos);
-    int izq,der;
-    izq = der = 0;
-    for (int i = 0; i < elementos; ++i)
+    map<string,double> aux;
+    map<string,map<string,double>>::iterator it = tabla_dist.begin();
+    bool encontrado = false;
+    while(it != tabla_dist.end() and it->first != fusionar.second)
     {
-        bool meter = false;
-        while (not meter)
+        if (it->first == fusionar.first)
         {
-            if (tabla_dist[izq] == fusionar) ++izq;
-            else if (fusionar.id1 == tabla_dist[izq].id1 or fusionar.id1 == tabla_dist[izq].id2)
-            
-                while(tabla_dist[der].id1 == fusionar.id2)
+            encontrado = true;
+            for(map<string,double>::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2)
+            {
+                if(it2->first != fusionar.second)
+                {
+                    double distancia = it2->second;
+                    if(fusionar.second > it2->first)
+                    {
+                        distancia += tabla_dist[it2->first][fusionar.second];
+                    }
+                    else
+                    {
+                        distancia += tabla_dist[fusionar.second][it2->first];
+                    }
+                    aux[it2->first] = distancia / 2;
+                }
             }
-            
         }
-        if(tabla_dist[izq])
-
-
-        while(tabla_dist[j]. and tabla_dist[k].)
+        else
         {
-            if (tabla_dist[j]) ++j;
-            if (tabla_dist[k]) ++k;
+            if (not encontrado)
+            {
+                it->second[fusionar.first+fusionar.second] = (it->second[fusionar.first] + it->second[fusionar.second]) / 2;
+                it->second.erase(fusionar.first);
+            }
+            it->second.erase(fusionar.second);
+        } 
+        ++it;
+    }
+    tabla_dist[fusionar.first + fusionar.second] = aux;
+    tabla_dist.erase(fusionar.first);
+    tabla_dist.erase(fusionar.second);
+}
+
+void Cjt_clusters::imprime_tabla_distancias()
+{
+    for(map<string,map<string,double>>::iterator it = tabla_dist.begin(); it != tabla_dist.end(); ++it)
+    {
+        cout << it->first << ':';
+        for(map<string,double>::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2)
+        {
+            cout << ' ' << it2->first << " (" << it2->second << ')';
         }
+        cout << endl;
     }
 }
-*/

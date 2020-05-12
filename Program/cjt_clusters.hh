@@ -25,7 +25,7 @@ private:
 
   map<string,map<string,double>> tabla_dist;
 
-  void actualizar_tabla(Cjt_especies& Conjunto,const pair<string,string>& fusionar);
+  void actualizar_tabla(const pair<string,string>& fusionar);
 
 public:
 
@@ -71,8 +71,14 @@ public:
   \pre Número de clústers del conjunto > 1
   \post Se ejecuta el paso WPGMA
 */
-    void wpgma(Cjt_especies& Conjunto);
+    void wpgma();
 
+/** @brief 
+
+  \pre 
+  \post 
+*/
+    void imprime_tabla_distancias();
 /** @brief Operación de escritura.
 
   \pre <em>Cierto</em>
