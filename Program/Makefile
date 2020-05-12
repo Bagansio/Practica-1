@@ -1,7 +1,7 @@
 OPCIONS = -D_JUDGE_ -D_GLIBCXX_DEBUG  -O2 -Wall -Wextra -Werror -Wno-sign-compare -std=c++11
 
-program.exe: program.o cjt_especies.o especie.o
-	g++ -o program.exe program.o cjt_especies.o especie.o
+program.exe: program.o cjt_especies.o especie.o cjt_clusters.o
+	g++ -o program.exe program.o cjt_especies.o especie.o cjt_clusters.o
 	rm *.o
 
 especie.o:  especie.cc especie.hh 
@@ -18,8 +18,11 @@ program.o: program.cc cjt_especies.hh especie.hh
 
 
 test: program.exe
-	./program.exe < inp.txt > a.txt
+	./program.exe < /mnt/f/alexm/Repositorios/Practica-1/Program/Sample/sample.inp > a.txt
 	
+tar: 
+	tar -cvf practica.tar Makefile especie.hh especie.cc cjt_clusters.hh cjt_clusters.cc cjt_especies.hh cjt_especies.cc program.cc
+
 borrar:
 	rm a.txt
 	rm *.o 

@@ -27,6 +27,8 @@ private:
 
   void actualizar_tabla(const pair<string,string>& fusionar);
 
+  void imprime_clusters(const BinTree<pair<string,double>>& arbol);
+
 public:
 
     //CONSTRUCTORAS
@@ -71,7 +73,14 @@ public:
   \pre Número de clústers del conjunto > 1
   \post Se ejecuta el paso WPGMA
 */
-    void wpgma();
+    bool wpgma();
+
+/** @brief 
+
+  \pre 
+  \post 
+*/
+    void arbol_filogenetico();
 
 /** @brief 
 
@@ -79,18 +88,19 @@ public:
   \post 
 */
     void imprime_tabla_distancias();
+
 /** @brief Operación de escritura.
 
   \pre <em>Cierto</em>
   \post Se han escrito por el canal estandar de salida el cluster
 */
-    void imprime_cluster();
+    bool imprime_cluster(string id);
 
 /** @brief Operación de escritura.
 
   \pre <em>Cierto</em>
   \post Se han escrito por el canal estandar de salida el cluster y las distancias entre ellos
 */
-    void imprime_arbol_filogenetico();
+    bool imprime_arbol_filogenetico(Cjt_especies& Conjunto);
 }; 
 #endif

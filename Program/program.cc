@@ -139,24 +139,37 @@ int main()
           cout << "# " << comanda << endl;
           Conjunto.imprime_tabla_distancias();
         }
-        else if (comanda == "fin") break;     //ACABA EL PROGRAMA
-        else if (comanda == "inicializar_clusters")
+        else if (comanda == "inicializa_clusters")
         {
+          cout << "# " << comanda << endl; 
           Clusters.inicializar_clusters(Conjunto);
-        }
-        else if(comanda == "wpgma")
-        {
-          
-          Clusters.wpgma();
           Clusters.imprime_tabla_distancias();
         }
-        else if (comanda == "dist_min")
+        else if(comanda == "ejecuta_paso_wpgma")
         {
-          Clusters.inicializar_clusters(Conjunto);
-          double min = 100;
-          pair<string,string> aux = Clusters.distancia_minima(min);
-          cout << aux.first << aux.second;
+          cout << "# " << comanda << endl; 
+          if(Clusters.wpgma())
+          {
+            Clusters.imprime_tabla_distancias();
+          }
+          else cout << "ERROR: num_clusters <= 1"  << endl;
         }
+        else if (comanda == "imprime_cluster")
+        {
+            string id;
+            cin >> id;
+
+            cout << "# " << comanda << ' ' << id << endl;  
+            if(not Clusters.imprime_cluster(id)) cout << "ERROR: El cluster " << id << " no existe.";
+            cout << endl;
+        }
+        else if (comanda == "imprime_arbol_filogenetico")
+        {
+          cout << "# " << comanda << endl;
+          if(not Clusters.imprime_arbol_filogenetico(Conjunto)) cout << "ERROR: El conjunto de clusters es vacio.";
+          cout << endl;
+        }
+        else if (comanda == "fin") break;     //ACABA EL PROGRAMA
         cout << endl;
     }
 }

@@ -35,14 +35,29 @@ pair<string,string> Cjt_clusters::distancia_minima(double& min)
     return dist_min;
 }
 
-void  Cjt_clusters::wpgma()
+bool  Cjt_clusters::wpgma()
 {
+    if (bosque.size() > 1)
+    {
     double dist;
     pair<string,string> fusionar = distancia_minima(dist);
-    bosque[fusionar.first + fusionar.second] =  BinTree<pair<string,double>>(make_pair(fusionar.first + fusionar.second,dist),bosque[fusionar.first],bosque[fusionar.second]);
-    bosque.erase(fusionar.first);
+    map<string,BinTree<pair<string,double>>>::iterator it = bosque.find(fusionar.first);
+    cout << it->first << ' ' << endl;
+    it->second = BinTree<pair<string,double>>(make_pair(fusionar.first + fusionar.second,dist/2),it->second,bosque[fusionar.second]);
+    cout << it->first << ' ' << endl;
+    it->first == fusionar.second + fusionar.first;
+    cout << it->first << ' ' << endl;
+    cout << "OHPOPRTOT" << endl;
     bosque.erase(fusionar.second);
     actualizar_tabla(fusionar);
+    return true;
+    }
+    else return false;
+}
+
+void Cjt_clusters::arbol_filogenetico()
+{
+    while(wpgma());
 }
 
 void Cjt_clusters::actualizar_tabla(const pair<string,string>& fusionar)
@@ -99,4 +114,36 @@ void Cjt_clusters::imprime_tabla_distancias()
         }
         cout << endl;
     }
+}
+
+bool Cjt_clusters::imprime_cluster(string id)
+{
+    if (bosque.find(id) != bosque.end())
+    {
+        imprime_clusters(bosque[id]);
+        return true;
+    }
+    else return false;
+}
+
+void Cjt_clusters::imprime_clusters(const BinTree<pair<string,double>>& arbol)
+{
+    if (not arbol.empty())
+    {
+        cout << '[';
+        if (arbol.value().second != 0) cout << '(' << arbol.value().first << ", " << arbol.value().second  << ") ";
+        else cout << arbol.value().first;
+        imprime_clusters(arbol.left());
+        imprime_clusters(arbol.right());
+        cout << ']';
+    }
+}
+
+bool Cjt_clusters::imprime_arbol_filogenetico(Cjt_especies& Conjunto)
+{
+    inicializar_clusters(Conjunto);
+    if (bosque.size() == 0) return false;
+    arbol_filogenetico();
+    imprime_clusters(bosque.begin()->second);
+    return true;
 }
