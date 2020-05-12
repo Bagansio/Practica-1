@@ -41,13 +41,8 @@ bool  Cjt_clusters::wpgma()
     {
     double dist;
     pair<string,string> fusionar = distancia_minima(dist);
-    map<string,BinTree<pair<string,double>>>::iterator it = bosque.find(fusionar.first);
-    cout << it->first << ' ' << endl;
-    it->second = BinTree<pair<string,double>>(make_pair(fusionar.first + fusionar.second,dist/2),it->second,bosque[fusionar.second]);
-    cout << it->first << ' ' << endl;
-    it->first == fusionar.second + fusionar.first;
-    cout << it->first << ' ' << endl;
-    cout << "OHPOPRTOT" << endl;
+    bosque[fusionar.first + fusionar.second] = BinTree<pair<string,double>>(make_pair(fusionar.first + fusionar.second,dist/2),bosque[fusionar.first],bosque[fusionar.second]);
+    bosque.erase(fusionar.first);
     bosque.erase(fusionar.second);
     actualizar_tabla(fusionar);
     return true;

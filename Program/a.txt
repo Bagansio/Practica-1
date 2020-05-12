@@ -94,15 +94,70 @@ f: g (9.52381)
 g:
 
 # imprime_arbol_filogenetico
-f 
-f 
-f 
-OHPOPRTOT
-a 
-a 
-a 
-OHPOPRTOT
-b 
-b 
-b 
-OHPOPRTOT
+[(acdbefg, 49.6528) [(acdbe, 45.7951) [(acd, 43.695) [(ac, 35.7143) [a][c]][d]][(be, 41.9355) [b][e]]][(fg, 4.7619) [f][g]]]
+
+# elimina_especie nuevo1
+ERROR: La especie nuevo1 no existe.
+
+# inicializa_clusters
+a: b (90.9091) c (71.4286) d (90.9091) e (90.9091) f (94.4444) g (94.4444)
+b: c (87.5) d (87.5) e (83.871) f (100) g (100)
+c: d (83.871) e (94.1176) f (100) g (100)
+d: e (97.1429) f (100) g (100)
+e: f (100) g (100)
+f: g (9.52381)
+g:
+
+# ejecuta_paso_wpgma
+a: b (90.9091) c (71.4286) d (90.9091) e (90.9091) fg (94.4444)
+b: c (87.5) d (87.5) e (83.871) fg (100)
+c: d (83.871) e (94.1176) fg (100)
+d: e (97.1429) fg (100)
+e: fg (100)
+fg:
+
+# imprime_cluster c
+[c]
+
+# ejecuta_paso_wpgma
+ac: b (89.2045) d (87.39) e (92.5134) fg (97.2222)
+b: d (87.5) e (83.871) fg (100)
+d: e (97.1429) fg (100)
+e: fg (100)
+fg:
+
+# imprime_cluster ac
+[(ac, 35.7143) [a][c]]
+
+# imprime_cluster eg
+ERROR: El cluster eg no existe.
+
+# lee_cjt_especies
+
+# imprime_cjt_especies
+
+# tabla_distancias
+
+# imprime_arbol_filogenetico
+ERROR: El conjunto de clusters es vacio.
+
+# ejecuta_paso_wpgma
+ERROR: num_clusters <= 1
+
+# crea_especie pangolin AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+# imprime_cjt_especies
+pangolin AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+# tabla_distancias
+pangolin:
+
+# obtener_gen pangolin
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+# imprime_arbol_filogenetico
+[pangolin]
+
+# ejecuta_paso_wpgma
+ERROR: num_clusters <= 1
+

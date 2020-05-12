@@ -17,9 +17,10 @@ program.o: program.cc cjt_especies.hh especie.hh
 	g++ -c program.cc $(OPCIONS)
 
 
-test: program.exe
-	./program.exe < /mnt/f/alexm/Repositorios/Practica-1/Program/Sample/sample.inp > a.txt
-	
+test: 
+	time ./program.exe < /mnt/f/alexm/Repositorios/Practica-1/Program/Sample/sample.inp > a.txt  
+	diff a.txt /mnt/f/alexm/Repositorios/Practica-1/Program/Sample/sample.cor
+
 tar: 
 	tar -cvf practica.tar Makefile especie.hh especie.cc cjt_clusters.hh cjt_clusters.cc cjt_especies.hh cjt_especies.cc program.cc
 
