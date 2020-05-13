@@ -29,6 +29,10 @@ pair<string,string> Cjt_clusters::distancia_minima(double& min)
                 dist_min = make_pair(it1->first,it2->first);
                 min = it2->second;
             }
+            else if (min == it2->second and (dist_min.first + dist_min.second).length() > (it1->first + it2->first).length())
+            {
+                dist_min = make_pair(it1->first,it2->first);
+            }
         }
         ++it1;
     }
@@ -47,7 +51,7 @@ bool  Cjt_clusters::wpgma()
     actualizar_tabla(fusionar);
     return true;
     }
-    else return false;
+    return false;
 }
 
 void Cjt_clusters::actualizar_tabla(const pair<string,string>& fusionar)
@@ -106,6 +110,23 @@ void Cjt_clusters::imprime_tabla_distancias()
     }
 }
 
+void Cjt_clusters::busca_cluster(bool& encontrado,const BinTree<pair<string,double>>& arbol, string id)
+{
+    if (not arbol.empty())
+    {
+        if (arbol.value().first == id) 
+        { 
+            imprime_clusters(arbol);
+            encontrado = true;
+        }
+        else
+        {
+            busca_cluster(encontrado,arbol.left(),id);
+            busca_cluster(encontrado,arbol.right(),id);
+        }
+    }
+}
+
 bool Cjt_clusters::imprime_cluster(string id)
 {
     if (bosque.find(id) != bosque.end())
@@ -113,7 +134,16 @@ bool Cjt_clusters::imprime_cluster(string id)
         imprime_clusters(bosque[id]);
         return true;
     }
-    else return false;
+    else {
+        bool encontrado = false;
+        map<string,BinTree<pair<string,double>>>::iterator it = bosque.begin();
+        while(not encontrado and it != bosque.end())
+        {
+            busca_cluster(encontrado,it->second,id);
+            ++it;
+        }
+        return encontrado;
+    }
 }
 
 void Cjt_clusters::imprime_clusters(const BinTree<pair<string,double>>& arbol)

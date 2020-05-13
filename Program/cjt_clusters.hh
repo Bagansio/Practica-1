@@ -29,6 +29,8 @@ private:
 
   void imprime_clusters(const BinTree<pair<string,double>>& arbol);
 
+
+  void busca_cluster(bool& encontrado,const BinTree<pair<string,double>>& arbol, string id);
 public:
 
     //CONSTRUCTORAS
