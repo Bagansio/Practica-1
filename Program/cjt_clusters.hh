@@ -80,13 +80,6 @@ public:
   \pre 
   \post 
 */
-    void arbol_filogenetico();
-
-/** @brief 
-
-  \pre 
-  \post 
-*/
     void imprime_tabla_distancias();
 
 /** @brief Operación de escritura.

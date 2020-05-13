@@ -19,7 +19,7 @@ pair<string,string> Cjt_clusters::distancia_minima(double& min)
 {
     map<string,map<string,double>>::iterator it1 = tabla_dist.begin();
     pair<string,string> dist_min;
-    min = 100;       //distancia más lejana
+    min = 101;       //distancia más lejana
     while(it1 != tabla_dist.end())
     {
         for(map<string,double>::iterator it2 = it1->second.begin(); it2 != it1->second.end(); ++it2)
@@ -48,11 +48,6 @@ bool  Cjt_clusters::wpgma()
     return true;
     }
     else return false;
-}
-
-void Cjt_clusters::arbol_filogenetico()
-{
-    while(wpgma());
 }
 
 void Cjt_clusters::actualizar_tabla(const pair<string,string>& fusionar)
@@ -138,7 +133,7 @@ bool Cjt_clusters::imprime_arbol_filogenetico(Cjt_especies& Conjunto)
 {
     inicializar_clusters(Conjunto);
     if (bosque.size() == 0) return false;
-    arbol_filogenetico();
+    while(wpgma());
     imprime_clusters(bosque.begin()->second);
     return true;
 }
