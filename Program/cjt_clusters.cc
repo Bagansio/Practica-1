@@ -7,9 +7,8 @@ void Cjt_clusters::inicializar_clusters(Cjt_especies& Conjunto)  //transformarlo
     int dimensiones = v.size();
     for (int i = 0; i < dimensiones; ++i)
     {
-        aux[v[i]] = BinTree<pair<string,double>>(make_pair(v[i],0));
+        aux[v[i]] = BinTree<pair<string,double>>(make_pair(v[i],-1)); //-1 porque ninguna distancia entre dos elementos sera negativa
     }
-    
     bosque = aux;
     tabla_dist = Conjunto.obtener_tabla_distancias();
 }
@@ -29,7 +28,8 @@ pair<string,string> Cjt_clusters::distancia_minima(double& min)
                 dist_min = make_pair(it1->first,it2->first);
                 min = it2->second;
             }
-            else if (min == it2->second and (dist_min.first + dist_min.second).length() > (it1->first + it2->first).length())
+            
+            else if (min == it2->second and (dist_min.first + dist_min.second) > (it1->first + it2->first))
             {
                 dist_min = make_pair(it1->first,it2->first);
             }
@@ -110,22 +110,7 @@ void Cjt_clusters::imprime_tabla_distancias()
     }
 }
 
-void Cjt_clusters::busca_cluster(bool& encontrado,const BinTree<pair<string,double>>& arbol, string id)
-{
-    if (not arbol.empty())
-    {
-        if (arbol.value().first == id) 
-        { 
-            imprime_clusters(arbol);
-            encontrado = true;
-        }
-        else
-        {
-            busca_cluster(encontrado,arbol.left(),id);
-            busca_cluster(encontrado,arbol.right(),id);
-        }
-    }
-}
+
 
 bool Cjt_clusters::imprime_cluster(string id)
 {
@@ -134,16 +119,7 @@ bool Cjt_clusters::imprime_cluster(string id)
         imprime_clusters(bosque[id]);
         return true;
     }
-    else {
-        bool encontrado = false;
-        map<string,BinTree<pair<string,double>>>::iterator it = bosque.begin();
-        while(not encontrado and it != bosque.end())
-        {
-            busca_cluster(encontrado,it->second,id);
-            ++it;
-        }
-        return encontrado;
-    }
+    return false;
 }
 
 void Cjt_clusters::imprime_clusters(const BinTree<pair<string,double>>& arbol)
@@ -151,7 +127,7 @@ void Cjt_clusters::imprime_clusters(const BinTree<pair<string,double>>& arbol)
     if (not arbol.empty())
     {
         cout << '[';
-        if (arbol.value().second != 0) cout << '(' << arbol.value().first << ", " << arbol.value().second  << ") ";
+        if (arbol.value().second != -1) cout << '(' << arbol.value().first << ", " << arbol.value().second  << ") ";
         else cout << arbol.value().first;
         imprime_clusters(arbol.left());
         imprime_clusters(arbol.right());
