@@ -28,11 +28,6 @@ pair<string,string> Cjt_clusters::distancia_minima(double& min)
                 dist_min = make_pair(it1->first,it2->first);
                 min = it2->second;
             }
-            
-            else if (min == it2->second and (dist_min.first + dist_min.second) > (it1->first + it2->first))
-            {
-                dist_min = make_pair(it1->first,it2->first);
-            }
         }
         ++it1;
     }
